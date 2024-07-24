@@ -1,0 +1,87 @@
+services:
+  nest-backend:
+    container_name: nest-app
+    image: nest-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - GEN_SALT=${GEN_SALT}
+      - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
+      - EMAIL_FROM_NAME=${EMAIL_FROM_NAME}
+      - APP_NAME=${APP_NAME}
+      - APP_WEBSITE=${APP_WEBSITE}
+      - PORT=${PORT}
+      - APP_URL=${APP_URL}
+      - BACKEND_URL=${BACKEND_URL}
+      - MailTrap_HOST=${MailTrap_HOST}
+      - MailTrap_PORT=${MailTrap_PORT}
+      - MailTrap_USERNAME=${MailTrap_USERNAME}
+      - MailTrap_PASSWORD=${MailTrap_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    networks:
+      - backend_network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    container_name: postgres-db
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=wallet
+    networks:
+      - backend_network
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - backend_network
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
+  redis:
+    container_name: redis-db
+    image: redis
+    environment:
+      - REDIS_PORT=6379
+    ports:
+      - 6379:6379
+    networks:
+      - backend_network
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data: {}
+  redis:
+    driver: local
