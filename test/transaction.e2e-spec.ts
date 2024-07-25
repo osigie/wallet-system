@@ -21,7 +21,7 @@ describe('TransactionController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
-    await prismaService.cleanDatabase();
+    // await prismaService.cleanDatabase();
 
     await request(app.getHttpServer())
       .post('/auth/register')

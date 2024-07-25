@@ -1,73 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Wallet System
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The Wallet System is an application designed to manage digital wallets, handle transactions, and integrate with various authentication mechanisms. Built using NestJS and Prisma, it aims to provide a robust and scalable solution for wallet management.
+
+## Features
+
+- User authentication and authorization
+- Transaction management
+- Integration with Redis for caching
+- Email notifications via Nodemailer
+- Swagger API documentation
+- Unit and E2E testing with Jest
+- Environment-based configurations
+
+## Folder Structure
+
+wallet-system/
+├── dist/
+├── node_modules/
+├── prisma/
+├── src/
+│ ├── account/
+│ ├── auth/
+│ ├── common/
+│ ├── configs/
+│ ├── filters/
+│ ├── guards/
+│ ├── interceptors/
+│ ├── lib/
+│ ├── providers/
+│ ├── redis/
+│ ├── token/
+│ ├── transaction/
+│ ├── transfer/
+│ ├── user/
+│ ├── app.controller.spec.ts
+│ ├── app.controller.ts
+│ ├── app.module.ts
+│ ├── app.service.ts
+│ ├── main.ts
+│ ├── prisma.service.ts
+│ ├── swagger-docs.ts
+├── test/
+│ ├── account.e2e-spec.ts
+│ ├── app.e2e-spec.ts
+│ ├── auth.e2e-spec.ts
+│ ├── jest-e2e.json
+│ ├── transaction.e2e-spec.ts
+├── .env
+├── .env.test
+├── package.json
+├── README.md
 
 ## Installation
 
+1.⁠ ⁠Clone the repository:
+
 ```bash
-$ yarn install
+git clone git@github.com:osigie/wallet-system.git
+cd wallet-system
+
 ```
 
-## Running the app
+```bash
+yarn install
+```
 
 ```bash
-# development
-$ yarn run start
 
-# watch mode
-$ yarn run start:dev
+cp .env.example .env
 
-# production mode
-$ yarn run start:prod
+```
+
+```bash
+docker-compose up -d
+
 ```
 
 ## Test
 
 ```bash
-# unit tests
-$ yarn run test
+yarn test
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+yarn test:int
+```
 
-## Stay in touch
+## API Documentation
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Swagger is used for API documentation. Once the application is running, navigate to /api/docs to view the Swagger documentation.

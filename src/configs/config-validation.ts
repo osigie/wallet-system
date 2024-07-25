@@ -15,7 +15,7 @@ export const validationSchema = Joi.object({
   MAIL_TRAP_PORT: Joi.number().default(2525).optional(),
   MAIL_TRAP_USERNAME: Joi.string().optional(),
   MAIL_TRAP_PASSWORD: Joi.string().optional(),
-
+  REDIS_HOST: Joi.string().optional(),
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRATION: Joi.string().required(),
   GEN_SALT: Joi.number().required(),

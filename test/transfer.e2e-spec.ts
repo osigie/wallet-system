@@ -21,7 +21,7 @@ describe('TransferController (e2e)', () => {
     await app.init();
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
 
-    await prismaService.cleanDatabase();
+    // await prismaService.cleanDatabase();
 
     await request(app.getHttpServer())
       .post('/auth/register')

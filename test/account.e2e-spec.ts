@@ -18,7 +18,7 @@ describe('AccountController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
-    await prismaService.cleanDatabase();
+    // await prismaService.cleanDatabase();
   });
 
   it('/accounts (POST)', async () => {
