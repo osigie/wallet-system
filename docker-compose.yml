@@ -14,7 +14,6 @@ services:
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
       - EMAIL_FROM_NAME=${EMAIL_FROM_NAME}
       - APP_NAME=${APP_NAME}
-      - APP_WEBSITE=${APP_WEBSITE}
       - PORT=${PORT}
       - BACKEND_URL=${BACKEND_URL}
       - MAIL_TRAP_HOST=${MAIL_TRAP_HOST}
@@ -31,7 +30,7 @@ services:
     depends_on:
       - postgres
       - redis
-      - postgres_test
+      - postgres-test
 
   postgres:
     container_name: postgres-db
@@ -48,8 +47,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  postgres_test:
-    container_name: postgres-db_test
+  postgres-test:
+    container_name: postgres-db-test
     image: postgres:12
     ports:
       - 5433:5432
@@ -61,7 +60,7 @@ services:
       - backend_network
     restart: unless-stopped
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_test:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
@@ -96,5 +95,6 @@ networks:
 
 volumes:
   postgres_data: {}
+  postgres_data_test: {}
   redis:
     driver: local
