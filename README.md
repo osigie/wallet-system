@@ -16,6 +16,7 @@ The Wallet System is an application designed to manage digital wallets, handle t
 
 ## Folder Structure
 
+```bash
 wallet-system/
 ├── dist/
 ├── node_modules/
@@ -52,6 +53,7 @@ wallet-system/
 ├── .env.test
 ├── package.json
 ├── README.md
+```
 
 ## Installation
 
@@ -84,7 +86,6 @@ docker-compose up -d
 yarn test
 
 ```
-
 
 ```bash
 yarn test:int
