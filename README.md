@@ -2,7 +2,7 @@
 
 ## Description
 
-The Wallet System is an application designed to manage digital wallets, handle transactions, and integrate with various authentication mechanisms. Built using NestJS and Prisma, it aims to provide a robust and scalable solution for wallet management.
+The Wallet System is an application designed to manage digital wallets, handle transactions, and integrate with various authentication mechanisms. Built using NestJS and Prisma.
 
 ## Features
 
