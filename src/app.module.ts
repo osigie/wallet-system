@@ -11,12 +11,14 @@ import { UserModule } from './user/user.module';
 import { RedisModule } from './redis/redis.module';
 import { TokenModule } from './token/token.module';
 import { validationSchema } from './configs/config-validation';
+import { DEVELEOPMENT_ENV } from './configs/constant';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       validationSchema: validationSchema,
       isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV || DEVELEOPMENT_ENV}`,
     }),
     BullModule.forRoot({
       redis: {

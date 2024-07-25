@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from 'src/user/user.service';
@@ -27,109 +32,13 @@ export class AuthService {
 
   logger = new Logger('AuthLogger');
 
-  // async login(user: LoginUserDto) {
-  //   const userFromDb = await this.userService.findUser({ email: user.email });
-  //   if (
-  //     user &&
-  //     AuthService.comparePassword(user.password, userFromDb.password)
-  //   ) {
-  //     delete userFromDb['password'];
-  //     delete userFromDb['isDisabled'];
-  //     const payload = { email: user.email, sub: userFromDb.id };
-  //     return {
-  //       access_token: this.jwtService.sign(payload),
-  //       user: userFromDb,
-  //     };
-  //   }
-  //   throw new BadRequestException('Invalid credentials');
-  // }
-
-  // async register(user: CreateUserDto) {
-  //   const hashedPassword = await AuthService.hashPassword(
-  //     user.password,
-  //     this.configService.get('SALT'),
-  //   );
-  //   const savedUser = await this.userService.createUser({
-  //     data: {
-  //       password: hashedPassword,
-  //       firstName: user.firstName,
-  //       lastName: user.lastName,
-  //       email: user.email,
-  //       userDetails: {
-  //         create: {
-  //           state: user.state,
-  //           sex: user.sex,
-  //           maritalStatus: user.maritalStatus,
-  //           address: user.address,
-  //         },
-  //       },
-  //       accounts: {
-  //         create: [{}],
-  //       },
-  //     },
-  //   });
-  //   delete savedUser['password'];
-  //   delete savedUser['isDisabled'];
-
-  //   return {
-  //     user: savedUser,
-  //   };
-  // }
-
-  // async resetPassword(email: string) {
-  //   const user = await this.userService.findUser({ email });
-  //   if (!user) {
-  //     return false;
-  //   }
-
-  //   const token = await this.tokenService.generateToken({
-  //     prefix: FORGET_PASSWORD_PREFIX,
-  //     userId: String(user.id),
-  //   });
-  //   await this.mailQueue.add(
-  //     {
-  //       to: email,
-  //       from: this.configService.get('EMAIL_FROM_ADDRESS'),
-  //       subject: 'Reset Password',
-  //       html: otpResetPasswordTemplate(
-  //         `${user.firstName}  ${user.lastName}`,
-  //         token,
-  //         FORGET_PASSWORD_PREFIX + token,
-  //         this.configService.get('EMAIL_FROM_NAME'),
-  //       ),
-  //     },
-  //     { priority: 1 },
-  //   );
-  // }
-
-  // async newPassword(newPassword: string, token: string) {
-  //   if (newPassword.length < 5) {
-  //     throw new BadRequestException('Password must be at least 5 characters');
-  //   }
-
-  //   const { user } = await this.tokenService.verifyToken(
-  //     FORGET_PASSWORD_PREFIX + token,
-  //   );
-
-  //   const hashedPassword = await AuthService.hashPassword(
-  //     user.password,
-  //     this.configService.get('SALT'),
-  //   );
-  //   await this.userService.resetPassword(hashedPassword, user.id);
-
-  //   //login the user after password has been changed
-  //   const payload = { email: user.email, sub: user.id };
-  //   delete user['password'];
-  //   delete user['isDisabled'];
-  //   return {
-  //     access_token: this.jwtService.sign(payload),
-  //     user: user,
-  //   };
-  // }
-
   async login(user: LoginUserDto) {
     try {
       const userFromDb = await this.userService.findUser({ email: user.email });
+
+      if (!userFromDb) {
+        throw new BadRequestException(' Invalid credentials');
+      }
 
       const compare = await AuthService.comparePassword(
         user.password,
@@ -161,7 +70,7 @@ export class AuthService {
       }
       const hashedPassword = await AuthService.hashPassword(
         user.password,
-        this.configService.get('SALT'),
+        this.configService.get('GEN_SALT'),
       );
       const savedUser = await this.userService.createUser({
         data: {
@@ -196,7 +105,7 @@ export class AuthService {
     try {
       const user = await this.userService.findUser({ email });
       if (!user) {
-        return false;
+        throw new NotFoundException('User not found');
       }
 
       const token = await this.tokenService.generateToken({
@@ -219,6 +128,7 @@ export class AuthService {
         { priority: 1 },
       );
       this.logger.log('Mail sent {}');
+      return token;
     } catch (error) {
       this.logger.error('Password reset failed', error.stack);
       throw error;

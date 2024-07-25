@@ -44,7 +44,7 @@ export async function paginate<T>(
   const nextCursor = getItemId(items[items.length - 1]) || null;
   const previousCursor = cursor > 0 ? getItemId(items[0]) : null;
 
-  console.log({ firstItem, nextCursor, previousCursor });
+  // console.log({ firstItem, nextCursor, previousCursor });
 
   // Generate pagination links
   const links: IPaginationLinks = {

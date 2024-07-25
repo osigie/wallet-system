@@ -32,7 +32,6 @@ export class TransactionController {
     @Query('startDate') startDate?: Date,
     @Query('endDate') endDate?: Date,
   ) {
-    console.log({ cursor, take, accountId, startDate, endDate });
     const data = await this.transactionService.findAllTransaction(
       cursor,
       take,

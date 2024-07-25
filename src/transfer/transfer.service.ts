@@ -4,6 +4,7 @@ import {
   Injectable,
   Logger,
   NotAcceptableException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Queue } from 'bull';
 import { PrismaService } from 'src/prisma.service';
@@ -62,7 +63,7 @@ export class TransferService {
       );
 
       if (!isUserAccount) {
-        throw new BadRequestException(
+        throw new UnauthorizedException(
           'You can only transfer funds from your account',
         );
       }

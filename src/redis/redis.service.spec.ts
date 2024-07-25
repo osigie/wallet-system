@@ -1,50 +1,72 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { RedisService } from './redis.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { RedisService } from './redis.service';
+import * as redisMock from 'redis-mock';
 
-// describe('RedisService', () => {
-//   let service: RedisService;
+describe('RedisService', () => {
+  let service: RedisService;
+  let redisClientMock: any;
 
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       providers: [RedisService],
-//     }).compile();
+  beforeEach(async () => {
+    redisClientMock = redisMock.createClient();
+    redisClientMock.set = jest.fn();
+    redisClientMock.get = jest.fn();
+    redisClientMock.del = jest.fn();
 
-//     service = module.get<RedisService>(RedisService);
-//   });
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        RedisService,
+        {
+          provide: 'REDIS_CLIENT',
+          useValue: redisClientMock,
+        },
+      ],
+    }).compile();
 
-//   it('should be defined', () => {
-//     expect(service).toBeDefined();
-//   });
-// });
+    service = module.get<RedisService>(RedisService);
+  });
 
-// import { Test, TestingModule } from '@nestjs/testing';
-// import Redis from 'ioredis';
-// import * as redisMock from 'redis-mock';
-// import { RedisService } from './redis.service';
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
 
-// describe('RedisService', () => {
-//   let service: RedisService;
-//   let redisClientMock: redisMock.RedisClient;
+  describe('set', () => {
+    it('should call set method of redis client with correct arguments', async () => {
+      const key = 'test-key';
+      const value = 'test-value';
+      const expirationSeconds = 3600;
 
-//   beforeEach(async () => {
-//     redisClientMock = {
-//       set: jest.fn(),
-//       get: jest.fn(),
-//     };
-//     const module: TestingModule = await Test.createTestingModule({
-//       providers: [
-//         RedisService,
-//         {
-//           provide: 'REDIS_CLIENT',
-//           useValue: redisMock.createClient(),
-//         },
-//       ],
-//     }).compile();
+      await service.set(key, value, expirationSeconds);
 
-//     redisClientMock = module.get('REDIS_CLIENT');
-//     service = module.get<RedisService>(RedisService);
-//   });
+      expect(redisClientMock.set).toHaveBeenCalledWith(
+        key,
+        value,
+        'EX',
+        expirationSeconds,
+      );
+    });
+  });
 
-//   it('should be defined', () => {
-//     expect(service).toBeDefined();
-//   });
+  describe('get', () => {
+    it('should call get method of redis client with correct arguments', async () => {
+      const key = 'test-key';
+      const returnValue = 'test-value';
+
+      redisClientMock.get.mockResolvedValue(returnValue);
+
+      const result = await service.get(key);
+
+      expect(redisClientMock.get).toHaveBeenCalledWith(key);
+      expect(result).toBe(returnValue);
+    });
+  });
+
+  describe('delete', () => {
+    it('should call del method of redis client with correct arguments', async () => {
+      const key = 'test-key';
+
+      await service.delete(key);
+
+      expect(redisClientMock.del).toHaveBeenCalledWith(key);
+    });
+  });
+});

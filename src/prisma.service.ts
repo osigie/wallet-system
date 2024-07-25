@@ -49,4 +49,17 @@ export class PrismaService
   async onModuleDestroy() {
     await this.$disconnect();
   }
+
+  async cleanDatabase() {
+    try {
+      await this.$transaction([
+        this.account.deleteMany(),
+        this.transaction.deleteMany(),
+        this.user.deleteMany(),
+        this.userDetails.deleteMany(),
+      ]);
+    } catch (error) {
+      console.error('Error cleaning database:', error);
+    }
+  }
 }

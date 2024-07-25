@@ -16,10 +16,6 @@ import { AuthService } from './auth.service';
   imports: [
     UserModule,
     PassportModule,
-    // JwtModule.register({
-    //   secret: jwtConstants.secret,
-    //   signOptions: { expiresIn: process.env.JWT_EXPIRATION },
-    // }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

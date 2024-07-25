@@ -32,7 +32,7 @@ model UserDetails {
   sex           String
   maritalStatus String
   address       String
-  user         User   @relation(fields: [userId], references: [id])
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int    @unique
 }
 
@@ -42,7 +42,7 @@ model Account {
   balance          Float         @default(0.0)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  user             User          @relation(fields: [userId], references: [id])
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   currency         String        @default("Naira")
   transactionsFrom Transaction[] @relation("transactionsFrom")
   transactionsTo   Transaction[] @relation("transactionsTo")
@@ -53,12 +53,11 @@ model Transaction {
   fromAccountId String
   toAccountId   String
   amount        Float
-  type          TransactionType
   description   String
   createdAt     DateTime        @default(now())
 
-  fromAccount Account @relation("transactionsFrom", fields: [fromAccountId], references: [id])
-  toAccount   Account @relation("transactionsTo", fields: [toAccountId], references: [id])
+  fromAccount Account @relation("transactionsFrom", fields: [fromAccountId], references: [id], onDelete: Cascade)
+  toAccount   Account @relation("transactionsTo", fields: [toAccountId], references: [id], onDelete: Cascade)
 }
 
 
