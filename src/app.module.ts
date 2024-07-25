@@ -22,7 +22,7 @@ import { DEVELEOPMENT_ENV } from './configs/constant';
     }),
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),

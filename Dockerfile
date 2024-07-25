@@ -1,5 +1,5 @@
 # Use a Node.js Alpine-based image for the development stage
-FROM node:18-alpine
+FROM node:alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the application (if needed)
-RUN npm run build
+# RUN npm run build
 
 # Define the command to start your application in development mode
-ENTRYPOINT ["/bin/sh", "-c", "npm run start:dev"]
+ENTRYPOINT ["/bin/sh", "-c", "npm run start:con:dev"]

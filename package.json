@@ -24,8 +24,9 @@
     "prisma:db:seed": "dotenv -e .env.development -- prisma db seed",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
-    "test:int": "yarn prisma:migrate:test && yarn  prisma:generate:test && yarn test:e2e",
-    "prisma:studio": "dotenv -e .env.development -- prisma studio"
+    "test:int": " yarn  prisma:generate:test && yarn prisma:migrate:test && yarn test:e2e",
+    "prisma:studio": "dotenv -e .env.development -- prisma studio",
+    "start:con:dev": "yarn prisma:generate:dev && yarn prisma:migrate:dev && yarn start:dev"
   },
   "dependencies": {
     "@nestjs/bull": "^10.1.1",
