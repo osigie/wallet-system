@@ -11,6 +11,9 @@ export class UserService {
   ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
+      include: {
+        accounts: true,
+      },
     });
   }
 
@@ -34,8 +37,8 @@ export class UserService {
       const query = Prisma.sql`
       SELECT
         COUNT(acc.id)::INTEGER as count
-      FROM "User" u JOIN "Account" acc ON u.id = acc."userId"
-      WHERE u.id = ${userId} AND acc.id = ${accountId}; 
+      FROM "Account" acc 
+      WHERE acc."userId" = ${userId} AND acc.id = ${accountId}; 
     `;
       const result = await this.prisma.$queryRaw(query);
       return result[0]?.count ? true : false;
