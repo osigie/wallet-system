@@ -1,6 +1,6 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AccountModule } from './account/account.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -20,11 +20,16 @@ import { DEVELEOPMENT_ENV } from './configs/constant';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || DEVELEOPMENT_ENV}`,
     }),
-    BullModule.forRoot({
-      redis: {
-        host: 'redis',
-        port: 6379,
-      },
+
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: 6379,
+        },
+      }),
     }),
     AuthModule,
     UserModule,
